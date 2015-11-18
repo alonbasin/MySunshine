@@ -64,21 +64,12 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_main, container, false);
 
-        String[] forcastArray = {
-                "bfdfnbdhdhbdrg 665",
-                "asdrgbadrggvdzg 554",
-                "segbasrggrsag 545",
-                "gasgesgsrggr 9679",
-                "gzrzgzsgsrgdsr 23346",
-                "gzsersrgdsrgasrd 7474",
-                "zgzsgdrdrgdg 5887"
-        };
+        String[] forcastArray = {};
         List<String> weekForecast = new ArrayList<>(Arrays.asList(forcastArray));
-
         mForecastAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item_forcast, R.id.list_item_forecast_textview, weekForecast);
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
-
+        new FetchWeatherTask().execute("94043");
         return rootView;
     }
 
@@ -143,15 +134,17 @@ public class ForecastFragment extends Fragment {
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
 
-            for (String s : resultStrs) {
-                Log.v(LOG_TAG, "Forecast entry: " + s);
-            }
             return resultStrs;
         }
 
         @Override
-        protected void onPostExecute(String[] strings) {
-            super.onPostExecute(strings);
+        protected void onPostExecute(String[] results) {
+            if (results != null) {
+                mForecastAdapter.clear();
+                for (String dayForecasrStr : results) {
+                    mForecastAdapter.add(dayForecasrStr);
+                }
+            }
         }
 
         @Override
