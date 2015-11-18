@@ -1,9 +1,10 @@
 package com.alma.mysunshine;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -62,14 +64,30 @@ public class ForecastFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_main, container, false);
 
         String[] forcastArray = {};
         List<String> weekForecast = new ArrayList<>(Arrays.asList(forcastArray));
-        mForecastAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item_forcast, R.id.list_item_forecast_textview, weekForecast);
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
-        listView.setAdapter(mForecastAdapter);
+        mForecastAdapter = new ArrayAdapter<>(
+                getActivity(),
+                R.layout.list_item_forcast,
+                R.id.list_item_forecast_textview,
+                weekForecast);
+
         new FetchWeatherTask().execute("94043");
+
+        View rootView =  inflater.inflate(R.layout.fragment_main, container, false);
+        final ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
+        listView.setAdapter(mForecastAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String forecast = mForecastAdapter.getItem(position);
+                Intent intent = new Intent(getActivity(), DetailActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, forecast);
+                startActivity(intent);
+            }
+        });
+
         return rootView;
     }
 
