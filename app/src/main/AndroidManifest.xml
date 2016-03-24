@@ -31,6 +31,14 @@
         </activity>
         <activity android:name=".SettingsActivity" >
         </activity>
+
+        <provider
+            android:authorities="com.alma.mysunshine"
+            android:name=".data.WeatherProvider"
+            android:enabled="true"
+            android:exported="true">
+        </provider>
+
     </application>
 
 </manifest>
