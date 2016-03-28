@@ -36,7 +36,6 @@ public class WeatherContract {
         return time.setJulianDay(julianDay);
     }
 
-
     public static final class LocationEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
@@ -86,9 +85,6 @@ public class WeatherContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        /*
-            Student: Fill in this buildWeatherLocation function
-         */
         public static Uri buildWeatherLocation(String locationSetting) {
             return CONTENT_URI.buildUpon().appendPath(locationSetting).build();
         }
